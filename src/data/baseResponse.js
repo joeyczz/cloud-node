@@ -1,4 +1,4 @@
-const constant = require('../utils/joeyConstant');
+const constant = require('../utils/constant');
 const _ = require('lodash');
 
 class BaseResponse {
@@ -23,9 +23,9 @@ class BaseResponse {
 	}
 
 	setValues(_values) {
-		if (Array.isArray(_values) && _values.length > 0) {
+		if (_.isArray(_values)) {
       this.values = _values;
-      this.value = _values[0];
+      this.value = _.first(_values);
     } else if (_.isObject(_values)) {
       this.values = [_values];
       this.value = _values;
@@ -36,11 +36,9 @@ class BaseResponse {
 	}
 
 	addValue(_value) {
-		if (!Array.isArray(this.values)) {
-			this.values = [];
-		}
+		if (!_.isArray(this.values)) this.values = [];
 		this.values.push(_value);
-		this.value = this.values[0];
+		this.value = _.first(this.values);
 	}
 };
 

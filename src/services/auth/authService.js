@@ -1,5 +1,5 @@
 const BaseResponse = require('../../data/baseResponse');
-const constant = require('../../utils/joeyConstant');
+const constant = require('../../utils/constant');
 
 const login = (username, password) => {
 	const res = new BaseResponse();

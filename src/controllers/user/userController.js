@@ -6,29 +6,32 @@ const service = require('../../services/user/userService');
 const _ = require('lodash');
 
 /* POST users listing. */
-router.post('/register', async (req, res) => {
+router.post('/register', (req, res) => {
 	let response = new BaseResponse();
-	if (req.body.phone === undefined || req.body.phone === null || req.body.phone.toString().trim() === '') {
-		response.message = '手机号不能为空';
+	if (_.isNil(req.body.phone) || req.body.phone.toString().trim() === '') {
+    response.message = '手机号不能为空';
+    return res.send(response);
 	} else if (!/^1[0-9]{10}$/.test(req.body.phone)) {
-		response.message = '手机号格式错误';
-	} else if (req.body.password === undefined || req.body.password === null || req.body.password.toString().trim() === '') {
-		response.message = '密码不能为空';
+    response.message = '手机号格式错误';
+    return res.send(response);
+	} else if (_.isNil(req.body.password) || req.body.password.toString().trim() === '') {
+    response.message = '密码不能为空';
+    return res.send(response);
 	} else if (!/[a-zA-Z]/.test(req.body.password) || !/[0-9]/.test(req.body.password)) {
-		response.message = '密码需要包含字母和数字';
+    response.message = '密码需要包含字母和数字';
+    return res.send(response);
 	} else if (req.body.password.length <= 6) {
-		response.message = '密码需要6位数字';
-	} else if (req.body.code.length !== 4 || !/[0-9]{4}/.test(req.body.code)) {
-		response.message = '错误的验证码';
-	} else {
-    try {
-      const sRes = await service.register(req.body.phone, req.body.password, req.body.code);
-      response = sRes;
-    } catch (err) {
-    	response = err;
-		}
-	}
-  res.send(response);
+    response.message = '密码需要6位字母+数字';
+    return res.send(response);
+	} else if (_.isNil(req.body.code) || req.body.code.length !== 4 || !/[0-9]{4}/.test(req.body.code)) {
+    response.message = '错误的验证码';
+    return res.send(response);
+	} 
+    service.register(req.body.phone, req.body.password, req.body.code).then(sRes => {
+      res.send(sRes);
+    }).catch(err => {
+      res.send(err);
+    });
 });
 
 /**
