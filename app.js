@@ -9,6 +9,8 @@ const jwt = require('jsonwebtoken');
 const config = require('./src/config/baseConfig');
 
 const app = express();
+// async 使用
+require('express-async-errors');
 
 app.set('joeySecret', config.jwtsecret);
 
