@@ -1,4 +1,4 @@
-const BaseResponse = require('../../data/baseResponse');
+const BaseResponse = require('../../data/BaseResponse');
 const constant = require('../../utils/constant');
 
 const login = async (username, password) => {

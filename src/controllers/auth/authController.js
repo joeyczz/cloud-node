@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-const BaseResponse = require("../../data/baseResponse");
-const service = require('../../services/auth/authService');
+const BaseResponse = require("../../data/BaseResponse");
+const service = require('../../services/auth/AuthService');
 const _ = require("lodash");
 
 /* POST auth listing. */

@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
-const BaseResponse = require("../../data/baseResponse");
-const service = require("../../services/user/userService");
+const BaseResponse = require("../../data/BaseResponse");
+const service = require("../../services/user/UserService");
 const _ = require("lodash");
 
 /* POST users listing. */
@@ -71,8 +71,14 @@ router.put("/password", async (req, res) => {
     response.message = "用户id不能为空";
   } else if (_.isNil(req.body.password)) {
     response.message = "密码不能为空";
+  } else if (_.isNil(req.body.oldPwd)) {
+    response.message = "旧密码不能为空";
   } else {
-    response = await service.resetPassword(req.body.id, req.body.password);
+    response = await service.resetPassword(
+      req.body.id,
+      req.body.password,
+      req.body.oldPwd
+    );
   }
   res.send(response);
 });

@@ -15,7 +15,7 @@ class PasswordUtil {
 	}
 
   static passwordEqual(password, salt, md5Pwd) {
-    return md5WithSalt(password, salt) === md5Pwd;
+    return this.md5WithSalt(password, salt) === md5Pwd;
   }
 };
 
