@@ -10,7 +10,7 @@ class UserService {
    * 注册用户
    * @param  {[type]} param   phone, password, code
    */
-  static async register(phone, password) {
+  static async register(phone, password, code, ipStr) {
     let response = new BaseResponse();
     const queryRes = await UserModel.queryByPhone(phone);
     if (
@@ -22,7 +22,7 @@ class UserService {
     }
     const salt = passwordUtil.generateSalt();
     const md5Pwd = passwordUtil.md5WithSalt(password, salt);
-    const insetRes = await UserModel.inset(phone, md5Pwd, salt);
+    const insetRes = await UserModel.inset(phone, md5Pwd, salt, ipStr);
     if (insetRes.code !== constant.RES_STATUS_SUCCESS)
       return Promise.reject(insetRes);
     return insetRes;

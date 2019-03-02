@@ -27,7 +27,8 @@ const User = mongoose.model(
       select: false
     },
     real_name: String,
-    register_time: Date
+    register_time: Date,
+    register_ip: String
   })
 );
 
@@ -36,7 +37,7 @@ class UserModel {
    * insert
    */
   // 插入一条数据
-  static inset(phone, md5Pwd, salt) {
+  static inset(phone, md5Pwd, salt, ipStr) {
     const response = new BaseResponse();
     return new Promise((resolve, reject) => {
       const user = new User({
@@ -44,7 +45,8 @@ class UserModel {
         salt,
         password: md5Pwd,
         status: constant.USER_STATUS.VALID,
-        register_time: new Date()
+        register_time: new Date(),
+        register_ip: ipStr
       });
       user.save((err, res) => {
         if (err) {
@@ -165,6 +167,31 @@ class UserModel {
       User.findByIdAndUpdate(
         id,
         { password, salt },
+        { new: true },
+        (err, res) => {
+          if (err) {
+            console.log("mongoose user find update res error", err);
+            reject(err);
+          } else {
+            response.code = constant.RES_STATUS_SUCCESS;
+            response.message = constant.RES_MESSAGE_SUCCESS;
+            response.setValues(res);
+            resolve(response);
+          }
+        }
+      );
+    });
+  }
+
+  /**
+   * update 登录时间
+   */
+  static findAndUpdateLastLoginInfo(id, ipStr) {
+    const response = new BaseResponse();
+    return new Promise((resolve, reject) => {
+      User.findByIdAndUpdate(
+        id,
+        { last_login_time: new Date(), last_login_ip: ipStr },
         { new: true },
         (err, res) => {
           if (err) {

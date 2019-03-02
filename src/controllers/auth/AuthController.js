@@ -4,6 +4,7 @@ const router = express.Router();
 const BaseResponse = require("../../data/BaseResponse");
 const service = require('../../services/auth/AuthService');
 const _ = require("lodash");
+const ipUtil = require("../../utils/ipUtil");
 
 /* POST auth listing. */
 router.post('/login', async (req, res) => {
@@ -16,7 +17,8 @@ router.post('/login', async (req, res) => {
   ) {
     response.message = "密码不能为空";
   } else {
-    response = await service.login(req.body.phone,  req.body.password);
+    const ipStr = ipUtil.getClientIp(req);
+    response = await service.login(req.body.phone,  req.body.password, ipStr);
   }
   res.send(response);
 });

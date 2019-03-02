@@ -4,6 +4,7 @@ const router = express.Router();
 const BaseResponse = require("../../data/BaseResponse");
 const service = require("../../services/user/UserService");
 const _ = require("lodash");
+const ipUtil = require("../../utils/ipUtil");
 
 /* POST users listing. */
 router.post("/register", async (req, res) => {
@@ -31,10 +32,12 @@ router.post("/register", async (req, res) => {
   ) {
     response.message = "错误的验证码";
   } else {
+    const ipStr = ipUtil.getClientIp(req);
     response = await service.register(
       req.body.phone,
       req.body.password,
-      req.body.code
+      req.body.code,
+      ipStr
     );
   }
   res.send(response);

@@ -10,11 +10,10 @@ class AuthService {
    * 登录
    * @param {*} phone
    * @param {*} password
+   * @param ipStr
    */
-  static async login(phone, password) {
-    const response = new BaseResponse();
+  static async login(phone, password, ipStr) {
     const queryRes = await UserModel.queryPwdAndSaltByPhone(phone);
-    console.log(queryRes);
     if (queryRes.code !== constant.RES_STATUS_SUCCESS) {
       return Promise.reject(queryRes);
     } else if (_.isEmpty(queryRes.values)) {
@@ -28,6 +27,9 @@ class AuthService {
     ) {
       return Promise.reject(new Error("密码不对"));
     }
+    // 更新上次登录ip
+    if (ipStr) UserModel.findAndUpdateLastLoginInfo(queryRes.value._id, ipStr);
+    const response = new BaseResponse();
     response.code = constant.RES_STATUS_SUCCESS;
     response.message = constant.RES_MESSAGE_SUCCESS;
     return response;
