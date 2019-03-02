@@ -7,6 +7,9 @@ const _ = require("lodash");
 const ipUtil = require("../../utils/ipUtil");
 
 /* POST users listing. */
+/**
+ * 注册
+ */
 router.post("/register", async (req, res) => {
   let response = new BaseResponse();
   if (_.isNil(req.body.phone) || req.body.phone.toString().trim() === "") {
@@ -47,8 +50,7 @@ router.post("/register", async (req, res) => {
  * 获取所有用户
  */
 router.get("/users", async (req, res) => {
-  let response = new BaseResponse();
-  response = await service.queryAll();
+  const response = await service.queryAll();
   res.send(response);
 });
 

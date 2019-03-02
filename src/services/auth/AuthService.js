@@ -36,6 +36,16 @@ class AuthService {
   }
 
   /**
+   * 刷新token
+   */
+  static async refreshToken() {
+    const res = new BaseResponse();
+    res.code = constant.RES_STATUS_SUCCESS;
+    res.message = constant.RES_MESSAGE_SUCCESS;
+    return res;
+  }
+
+  /**
    * 登出
    */
   static async logout() {

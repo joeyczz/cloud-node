@@ -7,6 +7,9 @@ const _ = require("lodash");
 const ipUtil = require("../../utils/ipUtil");
 
 /* POST auth listing. */
+/**
+ * 登录
+ */
 router.post('/login', async (req, res) => {
   let response = new BaseResponse();
   if (_.isNil(req.body.phone) || req.body.phone.toString().trim() === "") {
@@ -23,6 +26,17 @@ router.post('/login', async (req, res) => {
   res.send(response);
 });
 
+/**
+ * 刷新token
+ */
+router.post('/refresh-token', async (req, res) => {
+	const response = await service.refreshToken();
+  res.send(response);
+});
+
+/**
+ * 登出
+ */
 router.post('/logout', (req, res) => {
 	const response = service.logout();
   res.send(response);
