@@ -1,7 +1,7 @@
 const BaseResponse = require('../../data/baseResponse');
 const constant = require('../../utils/constant');
 
-const login = (username, password) => {
+const login = async (username, password) => {
 	const res = new BaseResponse();
 	res.code = constant.RES_STATUS_SUCCESS;
 	res.message = constant.RES_MESSAGE_SUCCESS;
