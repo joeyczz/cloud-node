@@ -14,6 +14,7 @@ const User = mongoose.model(
     username: String,
     nickname: String,
     phone: String,
+    salt: String, 
     email: String,
     password: String,
     real_name: String,
@@ -22,29 +23,30 @@ const User = mongoose.model(
 );
 
 // 查询结果排除密码
-const excludePwd = { password: 0 };
+const excludePwd = { password: 0 , salt: 0 };
 
 /**
  * insert
  */
 // 插入一条数据
-const inset = (phone, password) => {
+const inset = (phone, md5Pwd, salt) => {
   const response = new BaseResponse();
   return new Promise((resolve, reject) => {
     const user = new User({
       phone,
-      password,
+      salt,
+      password: md5Pwd,
       status: constant.USER_STATUS.VALID,
       register_time: new Date()
     });
-    user.save(excludePwd, (err, res) => {
+    user.save({ password: 0}, (err, res) => {
       if (err) {
         console.log("mongoose user insert res error", err);
         reject(err);
       } else {
+        console.log("mongoose res inset", res);
         response.code = constant.RES_STATUS_SUCCESS;
         response.message = constant.RES_MESSAGE_SUCCESS;
-        console.log("mongoose res inset", res);
         response.setValues(res);
         resolve(response);
       }

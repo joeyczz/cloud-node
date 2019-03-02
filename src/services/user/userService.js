@@ -1,9 +1,9 @@
 const BaseResponse = require("../../data/baseResponse");
 const constant = require("../../utils/constant");
+const passwordUtil = require("../../utils/passwordUtil");
+const _ = require("lodash");
 
 const userModel = require("../../model/user/userModel");
-
-const _ = require("lodash");
 
 /**
  * 注册用户
@@ -19,7 +19,13 @@ const register = async (phone, password) => {
     response.message = "手机号已被注册";
     return Promise.reject(response);
   }
-  const insetRes = await userModel.inset(phone, password);
+  const salt = passwordUtil.generateSalt();
+  console.log("salt", salt);
+
+  const md5Pwd = passwordUtil.md5WithSalt(password);
+  console.log("md5Pwd", md5Pwd);
+
+  const insetRes = await userModel.inset(phone, md5Pwd, salt);
   if (insetRes.code !== constant.RES_STATUS_SUCCESS)
     return Promise.reject(insetRes);
   return insetRes;
@@ -41,6 +47,8 @@ const queryAll = async () => {
 const queryUser = async id => {
   const res = await userModel.queryById(id);
   if (res.code !== constant.RES_STATUS_SUCCESS) return Promise.reject(res);
+  else if (_.isEmpty(res.values))
+    return Promise.reject(new Error("没有对应账号"));
   return res;
 };
 
@@ -61,7 +69,7 @@ const resetPassword = async (id, password) => {
  * 按 id 删除
  * @param id
  */
-const deleteById = async (id) => {
+const deleteById = async id => {
   const res = await userModel.findOneAndDelete(id);
   if (res.code !== constant.RES_STATUS_SUCCESS) return Promise.reject(res);
   return res;
