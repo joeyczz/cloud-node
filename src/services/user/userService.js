@@ -20,11 +20,7 @@ const register = async (phone, password) => {
     return Promise.reject(response);
   }
   const salt = passwordUtil.generateSalt();
-  console.log("salt", salt);
-
-  const md5Pwd = passwordUtil.md5WithSalt(password);
-  console.log("md5Pwd", md5Pwd);
-
+  const md5Pwd = passwordUtil.md5WithSalt(password, salt);
   const insetRes = await userModel.inset(phone, md5Pwd, salt);
   if (insetRes.code !== constant.RES_STATUS_SUCCESS)
     return Promise.reject(insetRes);
