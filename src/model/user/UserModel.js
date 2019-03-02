@@ -85,10 +85,10 @@ class UserModel {
   }
 
   // 按id搜索用户
-  static queryById(id) {
+  static queryPwdAndSaltByPhone(phone) {
     const response = new BaseResponse();
     return new Promise((resolve, reject) => {
-      User.findOne({ _id: id }, (err, res) => {
+      User.findOne({ phone }, { password: 1, salt: 1 }, (err, res) => {
         if (err) {
           console.log("mongoose user query id res error", err);
           reject(err);
@@ -103,10 +103,10 @@ class UserModel {
   }
 
   // 按id搜索用户
-  static queryPwdAndSaltById(id) {
+  static queryById(id) {
     const response = new BaseResponse();
     return new Promise((resolve, reject) => {
-      User.findOne({ _id: id }, { password: 1, salt: 1 }, (err, res) => {
+      User.findOne({ _id: id }, (err, res) => {
         if (err) {
           console.log("mongoose user query id res error", err);
           reject(err);
