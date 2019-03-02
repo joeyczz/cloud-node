@@ -1,10 +1,12 @@
 const express = require("express");
 const router = express.Router();
+const _ = require("lodash");
 
 const BaseResponse = require("../../data/BaseResponse");
 const service = require("../../services/user/UserService");
-const _ = require("lodash");
 const ipUtil = require("../../utils/ipUtil");
+const jwtUtl = require("../../utils/jwtUtil");
+const constant = require("../../utils/constant");
 
 /* POST users listing. */
 /**
@@ -42,7 +44,13 @@ router.post("/register", async (req, res) => {
       req.body.code,
       ipStr
     );
+    if (response.code === constant.RES_STATUS_SUCCESS) {
+      const payload = _.pick(response.value, ['_id', 'phone']);
+      const token = await jwtUtl.sign(payload);
+      res.cookie(constant.TOKEN, token, { httpOnly: true });
+    }
   }
+
   res.send(response);
 });
 

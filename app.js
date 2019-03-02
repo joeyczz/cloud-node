@@ -5,14 +5,12 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 
-const jwt = require('jsonwebtoken');
 const config = require('./src/config/baseConfig');
+const filterUtil = require('./src/utils/filterUtil');
 
 const app = express();
 // async 使用
 require('express-async-errors');
-
-app.set('joeySecret', config.jwtsecret);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -34,6 +32,8 @@ app.use((req, res, next) => {
 	res.header('Access-Control-Allow-Credentials','true');
 	next();
 });
+
+app.use(filterUtil.filter);
 
 const auth = require('./src/controllers/auth/authController');
 const user = require('./src/controllers/user/userController');

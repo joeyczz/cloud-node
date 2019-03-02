@@ -32,27 +32,8 @@ class AuthService {
     const response = new BaseResponse();
     response.code = constant.RES_STATUS_SUCCESS;
     response.message = constant.RES_MESSAGE_SUCCESS;
+    response.setValues({ phone, _id: queryRes.value._id });
     return response;
-  }
-
-  /**
-   * 刷新token
-   */
-  static async refreshToken() {
-    const res = new BaseResponse();
-    res.code = constant.RES_STATUS_SUCCESS;
-    res.message = constant.RES_MESSAGE_SUCCESS;
-    return res;
-  }
-
-  /**
-   * 登出
-   */
-  static async logout() {
-    const res = new BaseResponse();
-    res.code = constant.RES_STATUS_SUCCESS;
-    res.message = constant.RES_MESSAGE_SUCCESS;
-    return res;
   }
 }
 
