@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 
 const BaseResponse = require("../../data/baseResponse");
 const constant = require("../../utils/constant");
+const _ = require("lodash");
 
 const User = mongoose.model(
   "users",
@@ -14,16 +15,21 @@ const User = mongoose.model(
     username: String,
     nickname: String,
     phone: String,
-    salt: String, 
     email: String,
-    password: String,
+    // 查询结果排除密码
+    salt: {
+      type: String,
+      select: false
+    },
+    // 查询结果排除密码
+    password: {
+      type: String,
+      select: false
+    },
     real_name: String,
     register_time: Date
   })
 );
-
-// 查询结果排除密码
-const excludePwd = { password: 0 , salt: 0 };
 
 /**
  * insert
@@ -39,15 +45,17 @@ const inset = (phone, md5Pwd, salt) => {
       status: constant.USER_STATUS.VALID,
       register_time: new Date()
     });
-    user.save({ password: 0}, (err, res) => {
+    user.save((err, res) => {
       if (err) {
         console.log("mongoose user insert res error", err);
         reject(err);
       } else {
-        console.log("mongoose res inset", res);
+        // 需要先过滤 salt 和 password 猜测肯能mongoose直接取了塞入的值  所以没有过滤
+        const omitRes = _.omit(res.toObject(), ["salt", "password"]);
+        console.log("mongoose res inset", omitRes);
         response.code = constant.RES_STATUS_SUCCESS;
         response.message = constant.RES_MESSAGE_SUCCESS;
-        response.setValues(res);
+        response.setValues(omitRes);
         resolve(response);
       }
     });
@@ -61,7 +69,7 @@ const inset = (phone, md5Pwd, salt) => {
 const queryByPhone = phone => {
   const response = new BaseResponse();
   return new Promise((resolve, reject) => {
-    User.findOne({ phone }, excludePwd, (err, res) => {
+    User.findOne({ phone }, (err, res) => {
       if (err) {
         console.log("mongoose user query phone res error", err);
         reject(err);
@@ -79,7 +87,7 @@ const queryByPhone = phone => {
 const queryById = id => {
   const response = new BaseResponse();
   return new Promise((resolve, reject) => {
-    User.findOne({ _id: id }, excludePwd, (err, res) => {
+    User.findOne({ _id: id }, (err, res) => {
       if (err) {
         console.log("mongoose user query id res error", err);
         reject(err);
@@ -115,7 +123,7 @@ const queryByParam = param => {
 const queryAll = () => {
   const response = new BaseResponse();
   return new Promise((resolve, reject) => {
-    User.find({}, excludePwd, (err, res) => {
+    User.find({}, (err, res) => {
       if (err) {
         console.log("mongoose user query all res error", err);
         reject(err);
@@ -138,7 +146,7 @@ const findAndUpdatePassword = (id, password) => {
     User.findByIdAndUpdate(
       id,
       { password: password },
-      { fields: excludePwd, new: true },
+      { new: true },
       (err, res) => {
         if (err) {
           console.log("mongoose user find update res error", err);
@@ -164,7 +172,7 @@ const findOneAndDelete = id => {
     User.findByIdAndUpdate(
       id,
       { status: constant.USER_STATUS.DELETE },
-      { fields: excludePwd, new: true },
+      { new: true },
       (err, res) => {
         if (err) {
           console.log("mongoose user find delete res error", err);

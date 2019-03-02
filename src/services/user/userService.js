@@ -72,6 +72,8 @@ const resetPassword = async (id, password) => {
 const deleteById = async id => {
   const res = await userModel.findOneAndDelete(id);
   if (res.code !== constant.RES_STATUS_SUCCESS) return Promise.reject(res);
+  else if (_.isEmpty(res.values))
+    return Promise.reject(new Error("没有对应账号"));
   return res;
 };
 
