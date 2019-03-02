@@ -2,6 +2,7 @@
 const USER_STATUS = {
   INVALID: 0, // 无效
   VALID: 1, // 有效
+  DELETE: 2, // 删除
 };
 
 module.exports = {

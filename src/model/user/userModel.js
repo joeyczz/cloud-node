@@ -17,9 +17,12 @@ const User = mongoose.model(
     email: String,
     password: String,
     real_name: String,
-    register_time: Date,
+    register_time: Date
   })
 );
+
+// 查询结果排除密码
+const excludePwd = { password: 0 };
 
 /**
  * insert
@@ -27,15 +30,14 @@ const User = mongoose.model(
 // 插入一条数据
 const inset = (phone, password) => {
   const response = new BaseResponse();
-
   return new Promise((resolve, reject) => {
     const user = new User({
       phone,
       password,
       status: constant.USER_STATUS.VALID,
-      register_time: new Date(),
+      register_time: new Date()
     });
-    user.save((err, res) => {
+    user.save(excludePwd, (err, res) => {
       if (err) {
         console.log("mongoose user insert res error", err);
         reject(err);
@@ -43,6 +45,7 @@ const inset = (phone, password) => {
         response.code = constant.RES_STATUS_SUCCESS;
         response.message = constant.RES_MESSAGE_SUCCESS;
         console.log("mongoose res inset", res);
+        response.setValues(res);
         resolve(response);
       }
     });
@@ -56,7 +59,7 @@ const inset = (phone, password) => {
 const queryByPhone = phone => {
   const response = new BaseResponse();
   return new Promise((resolve, reject) => {
-    User.find({ phone }, (err, res) => {
+    User.findOne({ phone }, excludePwd, (err, res) => {
       if (err) {
         console.log("mongoose user query phone res error", err);
         reject(err);
@@ -73,9 +76,8 @@ const queryByPhone = phone => {
 // 按id搜索用户
 const queryById = id => {
   const response = new BaseResponse();
-
   return new Promise((resolve, reject) => {
-    User.findOne({ _id: id }, (err, res) => {
+    User.findOne({ _id: id }, excludePwd, (err, res) => {
       if (err) {
         console.log("mongoose user query id res error", err);
         reject(err);
@@ -92,7 +94,6 @@ const queryById = id => {
 // 按条件搜索用户
 const queryByParam = param => {
   const response = new BaseResponse();
-
   return new Promise((resolve, reject) => {
     User.find(param, (err, res) => {
       if (err) {
@@ -111,9 +112,8 @@ const queryByParam = param => {
 // 搜索所有用户
 const queryAll = () => {
   const response = new BaseResponse();
-
   return new Promise((resolve, reject) => {
-    User.find({}, (err, res) => {
+    User.find({}, excludePwd, (err, res) => {
       if (err) {
         console.log("mongoose user query all res error", err);
         reject(err);
@@ -132,40 +132,49 @@ const queryAll = () => {
  */
 const findAndUpdatePassword = (id, password) => {
   const response = new BaseResponse();
-
   return new Promise((resolve, reject) => {
-    User.findOneAndUpdate({ _id: id }, { password: password }, (err, res) => {
-      if (err) {
-        console.log("mongoose user find update res error", err);
-        reject(err);
-      } else {
-        response.code = constant.RES_STATUS_SUCCESS;
-        response.message = constant.RES_MESSAGE_SUCCESS;
-        response.setValues(res);
-        resolve(response);
+    User.findByIdAndUpdate(
+      id,
+      { password: password },
+      { fields: excludePwd, new: true },
+      (err, res) => {
+        if (err) {
+          console.log("mongoose user find update res error", err);
+          reject(err);
+        } else {
+          response.code = constant.RES_STATUS_SUCCESS;
+          response.message = constant.RES_MESSAGE_SUCCESS;
+          response.setValues(res);
+          resolve(response);
+        }
       }
-    });
+    );
   });
 };
 
 /**
  * delete
+ * 逻辑删除
  */
 const findOneAndDelete = id => {
   const response = new BaseResponse();
-
   return new Promise((resolve, reject) => {
-    User.findOneAndDelete({ _id: id }, (err, res) => {
-      if (err) {
-        console.log("mongoose user find delete res error", err);
-        reject(err);
-      } else {
-        response.code = constant.RES_STATUS_SUCCESS;
-        response.message = constant.RES_MESSAGE_SUCCESS;
-        response.setValues(res);
-        resolve(response);
+    User.findByIdAndUpdate(
+      id,
+      { status: constant.USER_STATUS.DELETE },
+      { fields: excludePwd, new: true },
+      (err, res) => {
+        if (err) {
+          console.log("mongoose user find delete res error", err);
+          reject(err);
+        } else {
+          response.code = constant.RES_STATUS_SUCCESS;
+          response.message = constant.RES_MESSAGE_SUCCESS;
+          response.setValues(res);
+          resolve(response);
+        }
       }
-    });
+    );
   });
 };
 

@@ -31,7 +31,11 @@ router.post("/register", async (req, res) => {
   ) {
     response.message = "错误的验证码";
   } else {
-    response = await service.register(req.body.phone, req.body.password, req.body.code);
+    response = await service.register(
+      req.body.phone,
+      req.body.password,
+      req.body.code
+    );
   }
   res.send(response);
 });
@@ -46,18 +50,14 @@ router.get("/users", async (req, res) => {
 });
 
 /**
- * 获取所有用户
+ * 获取单个用户
  */
 router.get("/user", async (req, res) => {
   let response = new BaseResponse();
-  if (_.isEmpty(req.params.id)) {
+  if (_.isNil(req.query.id)) {
     response.message = "用户id不能为空";
   } else {
-    try {
-      response = await service.queryUser(req.params.id);
-    } catch (err) {
-      response = err;
-    }
+    response = await service.queryUser(req.query.id);
   }
   res.send(response);
 });
@@ -67,16 +67,12 @@ router.get("/user", async (req, res) => {
  */
 router.put("/password", async (req, res) => {
   let response = new BaseResponse();
-  if (_.isEmpty(req.body.id)) {
+  if (_.isNil(req.body.id)) {
     response.message = "用户id不能为空";
-  } else if (_.isEmpty(req.body.password)) {
+  } else if (_.isNil(req.body.password)) {
     response.message = "密码不能为空";
   } else {
-    try {
-      response = await service.resetPassword(req.body.id, req.body.password);
-    } catch (err) {
-      response = err;
-    }
+    response = await service.resetPassword(req.body.id, req.body.password);
   }
   res.send(response);
 });
@@ -86,14 +82,10 @@ router.put("/password", async (req, res) => {
  */
 router.delete("/user", async (req, res) => {
   let response = new BaseResponse();
-  if (_.isEmpty(req.body.id)) {
+  if (_.isNil(req.query.id)) {
     response.message = "用户id不能为空";
   } else {
-    try {
-      response = await service.deleteById(req.body.id);
-    } catch (err) {
-      response = err;
-    }
+    response = await service.deleteById(req.query.id);
   }
   res.send(response);
 });
