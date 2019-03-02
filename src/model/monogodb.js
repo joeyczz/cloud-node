@@ -3,6 +3,12 @@ const config = require("../config/baseConfig");
 
 const options = {
   useNewUrlParser: true,
+  autoReconnect: true,
+  reconnectTries: Number.MAX_VALUE,
+  reconnectInterval: 500,
+  connectTimeoutMS: 10000,
+  socketTimeoutMS: 45000,
+  keepAlive: 120
 };
 
 mongoose.connect(config.database, options);
