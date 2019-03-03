@@ -19,10 +19,12 @@ class AuthService {
     if (queryRes.code !== constant.RES_STATUS_SUCCESS) {
       response.message = queryRes.message;
       return response;
-    } if (_.isEmpty(queryRes.values)) {
+    }
+    if (_.isEmpty(queryRes.values)) {
       response.message = '没有对应账号';
       return response;
-    } if (
+    }
+    if (
       !passwordUtil.passwordEqual(
         password,
         queryRes.value.salt,
@@ -51,6 +53,15 @@ class AuthService {
       response.message = queryRes.message;
       return response;
     }
+
+    AuthModel.setVerifyCode(
+      queryRes.value._id,
+      Math.random()
+        .toString()
+        .slice(2, 6),
+    );
+
+    AuthModel.getVerifyCode(queryRes.value._id);
     return queryRes;
   }
 }

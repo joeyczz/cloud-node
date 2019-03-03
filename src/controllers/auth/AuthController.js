@@ -61,9 +61,9 @@ router.post('/logout', (req, res) => {
 });
 
 /**
- * 查询当前 user_auth 所有数据
+ * test 接口
  */
-router.get('/auths', async (req, res) => {
+router.get('/test', async (req, res) => {
   const response = await service.queryAll();
   res.send(response);
 });

@@ -1,23 +1,24 @@
 const express = require('express');
 const path = require('path');
-// const favicon = require('serve-favicon');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-
-// const config = require('./src/config/BaseConfig');
-const filterUtil = require('./src/utils/filterUtil');
 
 const app = express();
 // async 使用
 require('express-async-errors');
 
+// 引入mongodb
+require('./src/model/mongodb');
+// 引入redis
+require('./src/model/redis');
+// 拦截器
+const filterUtil = require('./src/utils/filterUtil');
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-// uncomment after placing your favicon in /public
-// app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));

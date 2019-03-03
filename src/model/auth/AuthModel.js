@@ -1,6 +1,7 @@
 // const _ = require('lodash');
 
 const mongoose = require('../mongodb');
+const redis = require('../redis');
 const BaseResponse = require('../../data/BaseResponse');
 const constant = require('../../utils/constant');
 
@@ -31,6 +32,26 @@ class AuthModel {
         }
       });
     });
+  }
+
+  // redis set verify code
+  static async setVerifyCode(id, code) {
+    const response = new BaseResponse();
+    const redisRes = await redis.set(`verify_code:${id}`, code);
+    if (redisRes) {
+      console.log(redisRes);
+    }
+    return response;
+  }
+
+  // redis get verify code
+  static async getVerifyCode(id) {
+    const response = new BaseResponse();
+    const redisRes = redis.get(`verify_code:${id}`);
+    if (redisRes) {
+      console.log(redisRes);
+    }
+    return response;
   }
 }
 
