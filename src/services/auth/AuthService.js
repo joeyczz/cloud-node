@@ -4,6 +4,7 @@ const BaseResponse = require('../../data/BaseResponse');
 const constant = require('../../utils/constant');
 const passwordUtil = require('../../utils/passwordUtil');
 const UserModel = require('../../model/user/UserModel');
+const AuthModel = require('../../model/auth/AuthModel');
 
 class AuthService {
   /**
@@ -38,6 +39,19 @@ class AuthService {
     response.message = constant.RES_MESSAGE_SUCCESS;
     response.setValues({ phone, _id: queryRes.value._id });
     return response;
+  }
+
+  /**
+   * 查询所有数据
+   */
+  static async queryAll() {
+    const response = new BaseResponse();
+    const queryRes = await AuthModel.queryAll();
+    if (queryRes.code !== constant.RES_STATUS_SUCCESS) {
+      response.message = queryRes.message;
+      return response;
+    }
+    return queryRes;
   }
 }
 

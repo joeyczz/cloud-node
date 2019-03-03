@@ -31,6 +31,7 @@ const User = mongoose.model(
     register_time: Date,
     register_ip: String,
   }),
+  'users',
 );
 
 class UserModel {

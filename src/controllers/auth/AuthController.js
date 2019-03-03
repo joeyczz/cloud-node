@@ -60,4 +60,12 @@ router.post('/logout', (req, res) => {
   res.send(response);
 });
 
+/**
+ * 查询当前 user_auth 所有数据
+ */
+router.get('/auths', async (req, res) => {
+  const response = await service.queryAll();
+  res.send(response);
+});
+
 module.exports = router;
