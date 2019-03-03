@@ -11,10 +11,10 @@ const options = {
   keepAlive: 120
 };
 
-mongoose.connect(config.database, options);
+mongoose.connect(config.mongodb.database, options);
 
 mongoose.connection.on("connected", () => {
-  console.log(`Mongoose connection open to ${config.database}`);
+  console.log(`Mongoose connection open to ${config.mongodb.database}`);
 });
 
 mongoose.connection.on("error", err => {
