@@ -1,8 +1,8 @@
+const _ = require("lodash");
+
 const BaseResponse = require("../../data/BaseResponse");
 const constant = require("../../utils/constant");
 const passwordUtil = require("../../utils/passwordUtil");
-const _ = require("lodash");
-
 const UserModel = require("../../model/user/UserModel");
 
 class AuthService {
@@ -13,11 +13,14 @@ class AuthService {
    * @param ipStr
    */
   static async login(phone, password, ipStr) {
+    let response = new BaseResponse();
     const queryRes = await UserModel.queryPwdAndSaltByPhone(phone);
     if (queryRes.code !== constant.RES_STATUS_SUCCESS) {
-      return Promise.reject(queryRes);
+      response.message = queryRes.message;
+      return response;
     } else if (_.isEmpty(queryRes.values)) {
-      return Promise.reject(new Error("没有对应账号"));
+      response.message = '没有对应账号';
+      return response;
     } else if (
       !passwordUtil.passwordEqual(
         password,
@@ -25,11 +28,12 @@ class AuthService {
         queryRes.value.password
       )
     ) {
-      return Promise.reject(new Error("密码不对"));
+      response.message = '密码不对';
+      return response;
     }
+
     // 更新上次登录ip
     if (ipStr) UserModel.findAndUpdateLastLoginInfo(queryRes.value._id, ipStr);
-    const response = new BaseResponse();
     response.code = constant.RES_STATUS_SUCCESS;
     response.message = constant.RES_MESSAGE_SUCCESS;
     response.setValues({ phone, _id: queryRes.value._id });

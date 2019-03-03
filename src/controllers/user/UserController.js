@@ -50,7 +50,6 @@ router.post("/register", async (req, res) => {
       res.cookie(constant.TOKEN, token, { httpOnly: true });
     }
   }
-
   res.send(response);
 });
 
@@ -66,12 +65,7 @@ router.get("/users", async (req, res) => {
  * 获取单个用户
  */
 router.get("/user", async (req, res) => {
-  let response = new BaseResponse();
-  if (_.isNil(req.query.id)) {
-    response.message = "用户id不能为空";
-  } else {
-    response = await service.queryUser(req.query.id);
-  }
+  const response = await service.queryUser(req.user._id);
   res.send(response);
 });
 
@@ -80,15 +74,13 @@ router.get("/user", async (req, res) => {
  */
 router.put("/password", async (req, res) => {
   let response = new BaseResponse();
-  if (_.isNil(req.body.id)) {
-    response.message = "用户id不能为空";
-  } else if (_.isNil(req.body.password)) {
+  if (_.isNil(req.body.password)) {
     response.message = "密码不能为空";
   } else if (_.isNil(req.body.oldPwd)) {
     response.message = "旧密码不能为空";
   } else {
     response = await service.resetPassword(
-      req.body.id,
+      req.user._id,
       req.body.password,
       req.body.oldPwd
     );
@@ -100,12 +92,7 @@ router.put("/password", async (req, res) => {
  * 按id删除用户
  */
 router.delete("/user", async (req, res) => {
-  let response = new BaseResponse();
-  if (_.isNil(req.query.id)) {
-    response.message = "用户id不能为空";
-  } else {
-    response = await service.deleteById(req.query.id);
-  }
+  const response = await service.deleteById(req.user._id);
   res.send(response);
 });
 

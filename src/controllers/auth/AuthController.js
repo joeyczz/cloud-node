@@ -39,7 +39,6 @@ router.post("/login", async (req, res) => {
 router.post("/refresh-token", async (req, res) => {
   let response = new BaseResponse();
   if (!_.isEmpty(req.user)) {
-    console.log(req.user);
     const payload = _.pick(req.user, ['_id', 'phone']);
     const token = await jwtUtl.sign(payload);
     response.code = constant.RES_STATUS_SUCCESS;
@@ -54,9 +53,9 @@ router.post("/refresh-token", async (req, res) => {
  */
 router.post("/logout", (req, res) => {
   const response = new BaseResponse();
-  res.cookie(constant.TOKEN, 'token', { expires: new Date(), httpOnly: true });
   response.code = constant.RES_STATUS_SUCCESS;
   response.message = constant.RES_MESSAGE_SUCCESS;
+  res.cookie(constant.TOKEN, 'token', { expires: new Date(), httpOnly: true });
   res.send(response);
 });
 

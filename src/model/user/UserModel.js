@@ -86,12 +86,34 @@ class UserModel {
     });
   }
 
-  // 按id搜索用户
+  // 按phone搜索用户
   static queryPwdAndSaltByPhone(phone) {
     const response = new BaseResponse();
     return new Promise((resolve, reject) => {
       User.findOne(
         { phone },
+        { password: 1, salt: 1, phone: 1 },
+        (err, res) => {
+          if (err) {
+            console.log("mongoose user query id res error", err);
+            reject(err);
+          } else {
+            response.code = constant.RES_STATUS_SUCCESS;
+            response.message = constant.RES_MESSAGE_SUCCESS;
+            response.setValues(res);
+            resolve(response);
+          }
+        }
+      );
+    });
+  }
+
+  // 按id搜索用户
+  static queryPwdAndSaltById(id) {
+    const response = new BaseResponse();
+    return new Promise((resolve, reject) => {
+      User.findOne(
+        { _id: id },
         { password: 1, salt: 1, phone: 1 },
         (err, res) => {
           if (err) {
