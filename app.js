@@ -1,11 +1,11 @@
 const express = require('express');
 const path = require('path');
-const favicon = require('serve-favicon');
+// const favicon = require('serve-favicon');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 
-const config = require('./src/config/baseConfig');
+// const config = require('./src/config/BaseConfig');
 const filterUtil = require('./src/utils/filterUtil');
 
 const app = express();
@@ -17,7 +17,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 // uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+// app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -26,17 +26,17 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // cros 跨域问题
 app.use((req, res, next) => {
-	res.header('Access-Control-Allow-Origin', '*');
-	res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE');
-	res.header('Access-Control-Allow-Headers', 'Content-Type');
-	res.header('Access-Control-Allow-Credentials','true');
-	next();
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  next();
 });
 
 app.use(filterUtil.filter);
 
-const auth = require('./src/controllers/auth/authController');
-const user = require('./src/controllers/user/userController');
+const auth = require('./src/controllers/auth/AuthController');
+const user = require('./src/controllers/user/UserController');
 
 app.use('/auth', auth);
 app.use('/user', user);

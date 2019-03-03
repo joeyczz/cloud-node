@@ -1,9 +1,9 @@
-const _ = require("lodash");
+const _ = require('lodash');
 
-const BaseResponse = require("../../data/BaseResponse");
-const constant = require("../../utils/constant");
-const passwordUtil = require("../../utils/passwordUtil");
-const UserModel = require("../../model/user/UserModel");
+const BaseResponse = require('../../data/BaseResponse');
+const constant = require('../../utils/constant');
+const passwordUtil = require('../../utils/passwordUtil');
+const UserModel = require('../../model/user/UserModel');
 
 class UserService {
   /**
@@ -11,16 +11,16 @@ class UserService {
    * @param  {[type]} param   phone, password, code
    */
   static async register(phone, password, code, ipStr) {
-    let response = new BaseResponse();
+    const response = new BaseResponse();
     const queryRes = await UserModel.queryByPhone(phone);
     if (queryRes.code !== constant.RES_STATUS_SUCCESS) {
       response.message = queryRes.message;
       return response;
     } else if (!_.isEmpty(queryRes.values)) {
-      response.message = "手机号已被注册";
+      response.message = '手机号已被注册';
       return response;
     }
-    
+
     // 新增用户
     const salt = passwordUtil.generateSalt();
     const md5Pwd = passwordUtil.md5WithSalt(password, salt);
@@ -36,7 +36,7 @@ class UserService {
    * 查询所有用户
    */
   static async queryAll() {
-    let response = new BaseResponse();
+    const response = new BaseResponse();
     const queryRes = await UserModel.queryAll();
     if (queryRes.code !== constant.RES_STATUS_SUCCESS) {
       response.message = queryRes.message;
@@ -50,13 +50,13 @@ class UserService {
    * @param id
    */
   static async queryUser(id) {
-    let response = new BaseResponse();
+    const response = new BaseResponse();
     const queryRes = await UserModel.queryById(id);
     if (queryRes.code !== constant.RES_STATUS_SUCCESS) {
       response.message = queryRes.message;
       return response;
     } else if (_.isEmpty(queryRes.values)) {
-      response.message = "没有对应账号";
+      response.message = '没有对应账号';
       return response;
     }
     return queryRes;
@@ -75,16 +75,16 @@ class UserService {
       response.message = queryRes.message;
       return response;
     } else if (_.isEmpty(queryRes.values)) {
-      response.message = "没有对应账号";
+      response.message = '没有对应账号';
       return response;
     } else if (
       !passwordUtil.passwordEqual(
         oldPwd,
         queryRes.value.salt,
-        queryRes.value.password
+        queryRes.value.password,
       )
     ) {
-      response.message = "旧密码不对";
+      response.message = '旧密码不对';
       return response;
     }
 
@@ -96,7 +96,7 @@ class UserService {
       response.message = updateRes.message;
       return response;
     } else if (_.isEmpty(updateRes.values)) {
-      response.message = "没有对应账号";
+      response.message = '没有对应账号';
       return response;
     }
     return updateRes;
@@ -107,13 +107,13 @@ class UserService {
    * @param id
    */
   static async deleteById(id) {
-    let response = new BaseResponse();
+    const response = new BaseResponse();
     const deleteRes = await UserModel.findOneAndDelete(id);
     if (deleteRes.code !== constant.RES_STATUS_SUCCESS) {
       response.message = deleteRes.message;
       return response;
     } else if (_.isEmpty(deleteRes.values)) {
-      response.message = "没有对应账号";
+      response.message = '没有对应账号';
       return response;
     }
     return deleteRes;

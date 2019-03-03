@@ -1,9 +1,9 @@
-const _ = require("lodash");
+const _ = require('lodash');
 
-const filterWhiteList = require("./filterWhiteList");
-const jwtUtil = require("./jwtUtil");
-const constant = require("./constant");
-const BaseResponse = require("../data/BaseResponse");
+const filterWhiteList = require('./filterWhiteList');
+const jwtUtil = require('./jwtUtil');
+const constant = require('./constant');
+const BaseResponse = require('../data/BaseResponse');
 
 class filterUtil {
   static filter(req, res, next) {
@@ -17,19 +17,19 @@ class filterUtil {
     const token = req.cookies.token;
     if (_.isNil(token)) {
       response.code = constant.RES_STATUS_NOLOGIN;
-      response.message = "未登录";
+      response.message = '未登录';
       res.send(response);
       return;
-    } 
+    }
 
     // 验证token
-    jwtUtil.verify(token).then(tokenRes => {
+    jwtUtil.verify(token).then((tokenRes) => {
       req.user = tokenRes;
       next();
-    }).catch(err => {
+    }).catch((err) => {
       console.log(err);
       response.code = constant.RES_STATUS_NOLOGIN;
-      response.message = "登录超时";
+      response.message = '登录超时';
       res.send(response);
     });
   }

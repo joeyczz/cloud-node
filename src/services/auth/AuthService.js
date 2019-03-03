@@ -1,9 +1,9 @@
-const _ = require("lodash");
+const _ = require('lodash');
 
-const BaseResponse = require("../../data/BaseResponse");
-const constant = require("../../utils/constant");
-const passwordUtil = require("../../utils/passwordUtil");
-const UserModel = require("../../model/user/UserModel");
+const BaseResponse = require('../../data/BaseResponse');
+const constant = require('../../utils/constant');
+const passwordUtil = require('../../utils/passwordUtil');
+const UserModel = require('../../model/user/UserModel');
 
 class AuthService {
   /**
@@ -13,7 +13,7 @@ class AuthService {
    * @param ipStr
    */
   static async login(phone, password, ipStr) {
-    let response = new BaseResponse();
+    const response = new BaseResponse();
     const queryRes = await UserModel.queryPwdAndSaltByPhone(phone);
     if (queryRes.code !== constant.RES_STATUS_SUCCESS) {
       response.message = queryRes.message;
@@ -25,7 +25,7 @@ class AuthService {
       !passwordUtil.passwordEqual(
         password,
         queryRes.value.salt,
-        queryRes.value.password
+        queryRes.value.password,
       )
     ) {
       response.message = '密码不对';

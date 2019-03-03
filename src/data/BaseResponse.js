@@ -1,19 +1,19 @@
-const constant = require("../utils/constant");
-const _ = require("lodash");
+const constant = require('../utils/constant');
+const _ = require('lodash');
 
 class BaseResponse {
-  constructor(
-    { code, count, totalCount, page, totalPage, message, values, value } = {
-      code: constant.RES_STATUS_ERROR,
-      count: 0,
-      totalCount: 0,
-      page: -1,
-      totalPage: -1,
-      message: constant.RES_MESSAGE_ERROR,
-      values: [],
-      value: null
-    }
-  ) {
+  constructor({
+    code, count, totalCount, page, totalPage, message, values, value,
+  } = {
+    code: constant.RES_STATUS_ERROR,
+    count: 0,
+    totalCount: 0,
+    page: -1,
+    totalPage: -1,
+    message: constant.RES_MESSAGE_ERROR,
+    values: [],
+    value: null,
+  }) {
     this.code = code;
     this.count = count;
     this.totalCount = totalCount;

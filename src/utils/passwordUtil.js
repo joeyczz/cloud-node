@@ -4,19 +4,17 @@ const bcrypt = require('bcrypt');
 const saltRounds = 8;
 
 class PasswordUtil {
-	constructor() {}
-  
   static generateSalt() {
     return bcrypt.genSaltSync(saltRounds);
   }
 
-	static md5WithSalt(password, salt) {
+  static md5WithSalt(password, salt) {
     return md5(`${salt}${password}:${salt}`);
-	}
+  }
 
   static passwordEqual(password, salt, md5Pwd) {
     return this.md5WithSalt(password, salt) === md5Pwd;
   }
-};
+}
 
 module.exports = PasswordUtil;

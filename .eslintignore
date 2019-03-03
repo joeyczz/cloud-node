@@ -1,0 +1,6 @@
+bin/
+node_modules/
+config/
+public/
+views/
+./*.js

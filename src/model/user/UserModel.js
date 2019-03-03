@@ -1,12 +1,13 @@
-const mongoose = require("../monogodb");
+const mongoose = require('../monogodb');
+
 const Schema = mongoose.Schema;
 
-const BaseResponse = require("../../data/BaseResponse");
-const constant = require("../../utils/constant");
-const _ = require("lodash");
+const BaseResponse = require('../../data/BaseResponse');
+const constant = require('../../utils/constant');
+const _ = require('lodash');
 
 const User = mongoose.model(
-  "users",
+  'users',
   new Schema({
     id: Schema.Types.ObjectId,
     status: Number,
@@ -19,17 +20,17 @@ const User = mongoose.model(
     // 查询结果排除密码
     salt: {
       type: String,
-      select: false
+      select: false,
     },
     // 查询结果排除密码
     password: {
       type: String,
-      select: false
+      select: false,
     },
     real_name: String,
     register_time: Date,
-    register_ip: String
-  })
+    register_ip: String,
+  }),
 );
 
 class UserModel {
@@ -46,16 +47,16 @@ class UserModel {
         password: md5Pwd,
         status: constant.USER_STATUS.VALID,
         register_time: new Date(),
-        register_ip: ipStr
+        register_ip: ipStr,
       });
       user.save((err, res) => {
         if (err) {
-          console.log("mongoose user insert res error", err);
+          console.log('mongoose user insert res error', err);
           reject(err);
         } else {
           // 需要先过滤 salt 和 password 猜测肯能mongoose直接取了塞入的值  所以没有过滤
-          const omitRes = _.omit(res.toObject(), ["salt", "password"]);
-          console.log("mongoose res inset", omitRes);
+          const omitRes = _.omit(res.toObject(), ['salt', 'password']);
+          console.log('mongoose res inset', omitRes);
           response.code = constant.RES_STATUS_SUCCESS;
           response.message = constant.RES_MESSAGE_SUCCESS;
           response.setValues(omitRes);
@@ -74,7 +75,7 @@ class UserModel {
     return new Promise((resolve, reject) => {
       User.findOne({ phone }, (err, res) => {
         if (err) {
-          console.log("mongoose user query phone res error", err);
+          console.log('mongoose user query phone res error', err);
           reject(err);
         } else {
           response.code = constant.RES_STATUS_SUCCESS;
@@ -95,7 +96,7 @@ class UserModel {
         { password: 1, salt: 1, phone: 1 },
         (err, res) => {
           if (err) {
-            console.log("mongoose user query id res error", err);
+            console.log('mongoose user query id res error', err);
             reject(err);
           } else {
             response.code = constant.RES_STATUS_SUCCESS;
@@ -103,7 +104,7 @@ class UserModel {
             response.setValues(res);
             resolve(response);
           }
-        }
+        },
       );
     });
   }
@@ -117,7 +118,7 @@ class UserModel {
         { password: 1, salt: 1, phone: 1 },
         (err, res) => {
           if (err) {
-            console.log("mongoose user query id res error", err);
+            console.log('mongoose user query id res error', err);
             reject(err);
           } else {
             response.code = constant.RES_STATUS_SUCCESS;
@@ -125,7 +126,7 @@ class UserModel {
             response.setValues(res);
             resolve(response);
           }
-        }
+        },
       );
     });
   }
@@ -136,7 +137,7 @@ class UserModel {
     return new Promise((resolve, reject) => {
       User.findOne({ _id: id }, (err, res) => {
         if (err) {
-          console.log("mongoose user query id res error", err);
+          console.log('mongoose user query id res error', err);
           reject(err);
         } else {
           response.code = constant.RES_STATUS_SUCCESS;
@@ -154,7 +155,7 @@ class UserModel {
     return new Promise((resolve, reject) => {
       User.find(param, (err, res) => {
         if (err) {
-          console.log("mongoose user query param res error", err);
+          console.log('mongoose user query param res error', err);
           reject(err);
         } else {
           response.code = constant.RES_STATUS_SUCCESS;
@@ -172,7 +173,7 @@ class UserModel {
     return new Promise((resolve, reject) => {
       User.find({}, (err, res) => {
         if (err) {
-          console.log("mongoose user query all res error", err);
+          console.log('mongoose user query all res error', err);
           reject(err);
         } else {
           response.code = constant.RES_STATUS_SUCCESS;
@@ -196,7 +197,7 @@ class UserModel {
         { new: true },
         (err, res) => {
           if (err) {
-            console.log("mongoose user find update res error", err);
+            console.log('mongoose user find update res error', err);
             reject(err);
           } else {
             response.code = constant.RES_STATUS_SUCCESS;
@@ -204,7 +205,7 @@ class UserModel {
             response.setValues(res);
             resolve(response);
           }
-        }
+        },
       );
     });
   }
@@ -221,7 +222,7 @@ class UserModel {
         { new: true },
         (err, res) => {
           if (err) {
-            console.log("mongoose user find update res error", err);
+            console.log('mongoose user find update res error', err);
             reject(err);
           } else {
             response.code = constant.RES_STATUS_SUCCESS;
@@ -229,7 +230,7 @@ class UserModel {
             response.setValues(res);
             resolve(response);
           }
-        }
+        },
       );
     });
   }
@@ -247,7 +248,7 @@ class UserModel {
         { new: true },
         (err, res) => {
           if (err) {
-            console.log("mongoose user find delete res error", err);
+            console.log('mongoose user find delete res error', err);
             reject(err);
           } else {
             response.code = constant.RES_STATUS_SUCCESS;
@@ -255,7 +256,7 @@ class UserModel {
             response.setValues(res);
             resolve(response);
           }
-        }
+        },
       );
     });
   }
