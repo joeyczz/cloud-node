@@ -1,10 +1,10 @@
+const _ = require('lodash');
+
 const mongoose = require('../monogodb');
-
-const Schema = mongoose.Schema;
-
 const BaseResponse = require('../../data/BaseResponse');
 const constant = require('../../utils/constant');
-const _ = require('lodash');
+
+const { Schema } = mongoose;
 
 const User = mongoose.model(
   'users',

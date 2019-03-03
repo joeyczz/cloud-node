@@ -20,21 +20,21 @@ router.post('/register', async (req, res) => {
   } else if (!/^1[0-9]{10}$/.test(req.body.phone)) {
     response.message = '手机号格式错误';
   } else if (
-    _.isNil(req.body.password) ||
-    req.body.password.toString().trim() === ''
+    _.isNil(req.body.password)
+    || req.body.password.toString().trim() === ''
   ) {
     response.message = '密码不能为空';
   } else if (
-    !/[a-zA-Z]/.test(req.body.password) ||
-    !/[0-9]/.test(req.body.password)
+    !/[a-zA-Z]/.test(req.body.password)
+    || !/[0-9]/.test(req.body.password)
   ) {
     response.message = '密码需要包含字母和数字';
   } else if (req.body.password.length <= 6) {
     response.message = '密码需要6位字母+数字';
   } else if (
-    _.isNil(req.body.code) ||
-    req.body.code.length !== 4 ||
-    !/[0-9]{4}/.test(req.body.code)
+    _.isNil(req.body.code)
+    || req.body.code.length !== 4
+    || !/[0-9]{4}/.test(req.body.code)
   ) {
     response.message = '错误的验证码';
   } else {

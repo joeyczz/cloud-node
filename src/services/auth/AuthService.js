@@ -18,10 +18,10 @@ class AuthService {
     if (queryRes.code !== constant.RES_STATUS_SUCCESS) {
       response.message = queryRes.message;
       return response;
-    } else if (_.isEmpty(queryRes.values)) {
+    } if (_.isEmpty(queryRes.values)) {
       response.message = '没有对应账号';
       return response;
-    } else if (
+    } if (
       !passwordUtil.passwordEqual(
         password,
         queryRes.value.salt,

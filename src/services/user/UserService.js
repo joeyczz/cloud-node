@@ -16,7 +16,7 @@ class UserService {
     if (queryRes.code !== constant.RES_STATUS_SUCCESS) {
       response.message = queryRes.message;
       return response;
-    } else if (!_.isEmpty(queryRes.values)) {
+    } if (!_.isEmpty(queryRes.values)) {
       response.message = '手机号已被注册';
       return response;
     }
@@ -55,7 +55,7 @@ class UserService {
     if (queryRes.code !== constant.RES_STATUS_SUCCESS) {
       response.message = queryRes.message;
       return response;
-    } else if (_.isEmpty(queryRes.values)) {
+    } if (_.isEmpty(queryRes.values)) {
       response.message = '没有对应账号';
       return response;
     }
@@ -74,10 +74,10 @@ class UserService {
     if (queryRes.code !== constant.RES_STATUS_SUCCESS) {
       response.message = queryRes.message;
       return response;
-    } else if (_.isEmpty(queryRes.values)) {
+    } if (_.isEmpty(queryRes.values)) {
       response.message = '没有对应账号';
       return response;
-    } else if (
+    } if (
       !passwordUtil.passwordEqual(
         oldPwd,
         queryRes.value.salt,
@@ -95,7 +95,7 @@ class UserService {
     if (updateRes.code !== constant.RES_STATUS_SUCCESS) {
       response.message = updateRes.message;
       return response;
-    } else if (_.isEmpty(updateRes.values)) {
+    } if (_.isEmpty(updateRes.values)) {
       response.message = '没有对应账号';
       return response;
     }
@@ -112,7 +112,7 @@ class UserService {
     if (deleteRes.code !== constant.RES_STATUS_SUCCESS) {
       response.message = deleteRes.message;
       return response;
-    } else if (_.isEmpty(deleteRes.values)) {
+    } if (_.isEmpty(deleteRes.values)) {
       response.message = '没有对应账号';
       return response;
     }

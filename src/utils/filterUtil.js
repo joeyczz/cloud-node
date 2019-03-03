@@ -14,7 +14,7 @@ class filterUtil {
     }
 
     const response = new BaseResponse();
-    const token = req.cookies.token;
+    const { token } = req.cookies;
     if (_.isNil(token)) {
       response.code = constant.RES_STATUS_NOLOGIN;
       response.message = '未登录';

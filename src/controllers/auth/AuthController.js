@@ -18,8 +18,8 @@ router.post('/login', async (req, res) => {
   if (_.isNil(req.body.phone) || req.body.phone.toString().trim() === '') {
     response.message = '手机号不能为空';
   } else if (
-    _.isNil(req.body.password) ||
-    req.body.password.toString().trim() === ''
+    _.isNil(req.body.password)
+    || req.body.password.toString().trim() === ''
   ) {
     response.message = '密码不能为空';
   } else {

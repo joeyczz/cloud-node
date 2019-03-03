@@ -1,5 +1,5 @@
-const constant = require('../utils/constant');
 const _ = require('lodash');
+const constant = require('../utils/constant');
 
 class BaseResponse {
   constructor({
@@ -50,11 +50,11 @@ class BaseResponse {
   addValue(_value) {
     if (!_.isArray(this.values)) this.values = [];
     if (_.isArray(_value)) {
-      this.values.push(...value);
+      this.values.push(..._value);
       this.value = _.first(this.values);
-      this.totalCount += value.length;
-      this.count += value.length;
-    } else if (_.isObject(_values)) {
+      this.totalCount += _value.length;
+      this.count += _value.length;
+    } else if (_.isObject(_value)) {
       this.values.push(_value);
       this.value = _.first(this.values);
       this.totalCount += 1;
