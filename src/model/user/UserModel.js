@@ -1,6 +1,6 @@
 const _ = require('lodash');
 
-const mongoose = require('../monogodb');
+const mongoose = require('../mongodb');
 const BaseResponse = require('../../data/BaseResponse');
 const constant = require('../../utils/constant');
 
