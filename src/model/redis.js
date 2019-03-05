@@ -8,18 +8,20 @@ const options = {
   // socket_keepalive: true,
   // socket_initialdelay: 100,
   retry_strategy(opt) {
-    console.log('retry_strategy', opt);
     if (opt.error && opt.error.code === 'ECONNREFUSED') {
       // End reconnecting on a specific error and flush all commands with
       // a individual error
-      return console.log('The server refused the connection');
+      console.log('The server refused the connection or network error');
+      return opt.attempt * 100;
     }
     if (opt.total_retry_time > 1000 * 60 * 60) {
       // End reconnecting after a specific timeout and flush all commands
       // with a individual error
-      return console.log('Retry time exhausted');
+      console.log('Retry time exhausted');
+      return opt.attempt * 100;
     }
     if (opt.attempt > 10) {
+      console.log('times ', opt.attempt);
       // End reconnecting with built in error
       return undefined;
     }
