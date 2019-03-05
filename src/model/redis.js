@@ -8,6 +8,7 @@ const options = {
   // socket_keepalive: true,
   // socket_initialdelay: 100,
   retry_strategy(opt) {
+    // 必须return数字  否则中断连接
     if (opt.error && opt.error.code === 'ECONNREFUSED') {
       // End reconnecting on a specific error and flush all commands with
       // a individual error
