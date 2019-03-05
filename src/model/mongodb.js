@@ -4,12 +4,21 @@ const config = require('../config/BaseConfig');
 
 const options = {
   useNewUrlParser: true,
+  // 不使用mongoose的缓存机制
+  bufferCommands: false,
+  // 自动重连
   autoReconnect: true,
+  // 重连最大尝试次数
   reconnectTries: Number.MAX_VALUE,
+  // 重连间隔
   reconnectInterval: 500,
+  // 错误立即返回 断开连接
+  bufferMaxEntries: 0,
   connectTimeoutMS: 10000,
   socketTimeoutMS: 45000,
-  keepAlive: 120,
+  // 类似心跳检查
+  keepAliveInitialDelay: 300000,
+  keepAlive: true,
 };
 
 mongoose.connect(config.mongodb.database, options);
@@ -23,6 +32,10 @@ mongoose.connection.on('error', (err) => {
 });
 
 mongoose.connection.on('disconnected', () => {
+  console.log('Mongoose connection disconnected');
+});
+
+mongoose.connection.on('reconnectFailed', () => {
   console.log('Mongoose connection disconnected');
 });
 

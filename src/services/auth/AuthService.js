@@ -5,6 +5,7 @@ const constant = require('../../utils/constant');
 const passwordUtil = require('../../utils/passwordUtil');
 const UserModel = require('../../model/user/UserModel');
 const AuthModel = require('../../model/auth/AuthModel');
+const to = require('../../utils/promiseUtil');
 
 class AuthService {
   /**
@@ -15,7 +16,7 @@ class AuthService {
    */
   static async login(phone, password, ipStr) {
     const response = new BaseResponse();
-    const queryRes = await UserModel.queryPwdAndSaltByPhone(phone);
+    const queryRes = await to(UserModel.queryPwdAndSaltByPhone(phone));
     if (queryRes.code !== constant.RES_STATUS_SUCCESS) {
       response.message = queryRes.message;
       return response;
@@ -36,7 +37,7 @@ class AuthService {
     }
 
     // 更新上次登录ip
-    if (ipStr) UserModel.findAndUpdateLastLoginInfo(queryRes.value._id, ipStr);
+    if (ipStr) to(UserModel.findAndUpdateLastLoginInfo(queryRes.value._id, ipStr));
     response.code = constant.RES_STATUS_SUCCESS;
     response.message = constant.RES_MESSAGE_SUCCESS;
     response.setValues({ phone, _id: queryRes.value._id });
@@ -48,7 +49,7 @@ class AuthService {
    */
   static async queryAll() {
     const response = new BaseResponse();
-    const queryRes = await AuthModel.queryAll();
+    const queryRes = await to(AuthModel.queryAll());
     if (queryRes.code !== constant.RES_STATUS_SUCCESS) {
       response.message = queryRes.message;
       return response;
