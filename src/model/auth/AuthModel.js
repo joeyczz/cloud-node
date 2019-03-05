@@ -35,23 +35,36 @@ class AuthModel {
   }
 
   // redis set verify code
-  static async setVerifyCode(id, code) {
+  static setVerifyCode(id, code) {
     const response = new BaseResponse();
-    const redisRes = await redis.set(`verify_code:${id}`, code);
-    if (redisRes) {
-      console.log(redisRes);
+    const redisRes = redis.set(`verify_code:${id}`, code);
+    if (!redisRes) {
+      console.log('Redis set verify code error', redisRes);
+      response.message = `Redis set verify code error ${redisRes}`;
+      return Promise.reject(response);
     }
-    return response;
+    response.code = constant.RES_STATUS_SUCCESS;
+    response.message = constant.RES_MESSAGE_SUCCESS;
+    response.setValues(redisRes);
+    return Promise.resolve(response);
   }
 
   // redis get verify code
-  static async getVerifyCode(id) {
+  static getVerifyCode(id) {
     const response = new BaseResponse();
-    const redisRes = redis.get(`verify_code:${id}`);
-    if (redisRes) {
-      console.log(redisRes);
-    }
-    return response;
+    return new Promise((resolve, reject) => {
+      redis.get(`verify_code:${id}`, (err, res) => {
+        if (err) {
+          console.log('Redis get verify code error', err);
+          reject(err);
+        } else {
+          response.code = constant.RES_STATUS_SUCCESS;
+          response.message = constant.RES_MESSAGE_SUCCESS;
+          response.setValues(res);
+          resolve(response);
+        }
+      });
+    });
   }
 }
 

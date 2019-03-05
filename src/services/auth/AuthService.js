@@ -37,7 +37,9 @@ class AuthService {
     }
 
     // 更新上次登录ip
-    if (ipStr) to(UserModel.findAndUpdateLastLoginInfo(queryRes.value._id, ipStr));
+    if (ipStr) {
+      to(UserModel.findAndUpdateLastLoginInfo(queryRes.value._id, ipStr));
+    }
     response.code = constant.RES_STATUS_SUCCESS;
     response.message = constant.RES_MESSAGE_SUCCESS;
     response.setValues({ phone, _id: queryRes.value._id });
@@ -55,14 +57,14 @@ class AuthService {
       return response;
     }
 
-    AuthModel.setVerifyCode(
-      queryRes.value._id,
-      Math.random()
-        .toString()
-        .slice(2, 6),
-    );
+    const code = Math.random()
+      .toString()
+      .slice(2, 6);
 
-    AuthModel.getVerifyCode(queryRes.value._id);
+    await to(AuthModel.setVerifyCode('keyid110', code));
+
+    const redisVal = await to(AuthModel.getVerifyCode('keyid110'));
+    console.log('redisVal: ', redisVal);
     return queryRes;
   }
 }

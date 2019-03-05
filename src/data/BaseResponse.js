@@ -33,7 +33,7 @@ class BaseResponse {
       this.value = _.first(_values);
       this.totalCount = _values.length;
       this.count = _values.length;
-    } else if (_.isObject(_values)) {
+    } else if (_.isObject(_values) || !_.isNil(_values)) {
       this.values = [_values];
       this.value = _values;
       this.totalCount = 1;
@@ -54,7 +54,7 @@ class BaseResponse {
       this.value = _.first(this.values);
       this.totalCount += _value.length;
       this.count += _value.length;
-    } else if (_.isObject(_value)) {
+    } else if (_.isObject(_value) || !_.isNil(_value)) {
       this.values.push(_value);
       this.value = _.first(this.values);
       this.totalCount += 1;

@@ -6,7 +6,7 @@ module.exports = (promise) => {
     return promise
       .then(res => res)
       .catch((err) => {
-        console.log(`promiseUtil: return Error ${err}`);
+        console.log(`promiseUtil: return Error promise ${err}`);
         return err;
       });
   }
