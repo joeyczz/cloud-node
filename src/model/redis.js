@@ -1,6 +1,7 @@
 const redis = require('redis');
 
 const config = require('../config');
+const logger = require('../utils/logger');
 
 const options = {
   host: config.redis.host,
@@ -13,13 +14,13 @@ const options = {
     if (opt.error && opt.error.code === 'ECONNREFUSED') {
       // End reconnecting on a specific error and flush all commands with
       // a individual error
-      console.log('The server refused the connection or network error');
+      logger.info('The server refused the connection or network error');
       return opt.attempt * 100;
     }
     if (opt.total_retry_time > 1000 * 60 * 60) {
       // End reconnecting after a specific timeout and flush all commands
       // with a individual error
-      console.log('Retry time exhausted');
+      logger.info('Retry time exhausted');
       return opt.attempt * 100;
     }
     if (opt.attempt > 10) {
@@ -39,19 +40,19 @@ const client = redis.createClient(options);
 // });
 
 client.on('connect', () => {
-  console.log(`Redis connect to ${config.redis.host}:${config.redis.port}`);
+  logger.info(`Redis connect to ${config.redis.host}:${config.redis.port}`);
 });
 
 client.on('reconnecting', (res) => {
-  console.log('Redis reconnecting info:', res.attempt, res.error.code);
+  logger.info('Redis reconnecting info:', res.attempt, res.error.code);
 });
 
 client.on('error', (err) => {
-  console.log('Redis ERROR:', err);
+  logger.error('Redis ERROR:', err);
 });
 
 client.on('end', () => {
-  console.log('Redis end');
+  logger.info('Redis end');
 });
 
 module.exports = client;

@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const config = require('../config');
+const logger = require('../utils/logger');
 
 const options = {
   user: config.mongodb.user,
@@ -26,19 +27,19 @@ const options = {
 mongoose.connect(config.mongodb.database, options);
 
 mongoose.connection.on('connected', () => {
-  console.log(`Mongoose connection open to ${config.mongodb.database}`);
+  logger.info(`Mongoose connection open to ${config.mongodb.database}`);
 });
 
 mongoose.connection.on('error', (err) => {
-  console.log('Mongoose connection error:', err);
+  logger.error('Mongoose connection error:', err);
 });
 
 mongoose.connection.on('disconnected', () => {
-  console.log('Mongoose connection disconnected');
+  logger.info('Mongoose connection disconnected');
 });
 
 mongoose.connection.on('reconnectFailed', () => {
-  console.log('Mongoose connection disconnected');
+  logger.info('Mongoose connection disconnected');
 });
 
 module.exports = mongoose;
