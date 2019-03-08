@@ -1,8 +1,10 @@
 const mongoose = require('mongoose');
 
-const config = require('../config/BaseConfig');
+const config = require('../config');
 
 const options = {
+  user: config.mongodb.user,
+  pass: config.mongodb.pass,
   useNewUrlParser: true,
   // 不使用mongoose的缓存机制
   bufferCommands: false,

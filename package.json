@@ -1,10 +1,12 @@
 {
   "name": "cloud",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
-    "dev": "nodemon ./bin/www",
+    "start": "cross-env NODE_ENV=development CONFIG_ENV=local nodemon ./bin/www",
+    "dev": "pm2 start ecosystem.config.js --only dev",
+    "test": "pm2 start ecosystem.config.js --only test",
+    "pro": "pm2 start ecosystem.config.js --only pro",
     "lint": "eslint --ext .js src",
     "lint-fix": "eslint --fix --ext .js src"
   },
@@ -12,6 +14,7 @@
     "bcrypt": "^3.0.4",
     "body-parser": "~1.18.2",
     "cookie-parser": "~1.4.3",
+    "cross-env": "^5.2.0",
     "debug": "~2.6.9",
     "ejs": "~2.5.7",
     "eslint": "^5.15.0",
@@ -21,6 +24,7 @@
     "ioredis": "^4.2.0",
     "jsonwebtoken": "^8.3.0",
     "lodash": "^4.17.11",
+    "log4js": "^4.0.2",
     "md5": "^2.2.1",
     "mongoose": "^5.3.6",
     "morgan": "~1.9.0",

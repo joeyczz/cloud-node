@@ -1,10 +1,19 @@
 const express = require('express');
 const path = require('path');
-const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+// morgan log配置
+const morganLog = require('./src/utils/morganLog');
 
 const app = express();
+
+/* logger start */
+// 引入 log4j 以及
+require('./src/utils/logger');
+
+app.use(morganLog);
+/* logger end */
+
 // async 使用
 require('express-async-errors');
 
@@ -19,7 +28,6 @@ const filterUtil = require('./src/utils/filterUtil');
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());

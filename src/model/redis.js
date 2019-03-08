@@ -1,12 +1,13 @@
 const redis = require('redis');
 
-const config = require('../config/BaseConfig');
+const config = require('../config');
 
 const options = {
   host: config.redis.host,
   port: config.redis.port,
-  // socket_keepalive: true,
-  // socket_initialdelay: 100,
+  password: config.redis.password,
+  // 未连接 redis 不使用缓存
+  enable_offline_queue: false,
   retry_strategy(opt) {
     // 必须return数字  否则中断连接
     if (opt.error && opt.error.code === 'ECONNREFUSED') {
@@ -42,7 +43,7 @@ client.on('connect', () => {
 });
 
 client.on('reconnecting', (res) => {
-  console.log('Redis reconnecting info:', res);
+  console.log('Redis reconnecting info:', res.attempt, res.error.code);
 });
 
 client.on('error', (err) => {

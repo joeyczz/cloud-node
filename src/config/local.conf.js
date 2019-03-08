@@ -1,6 +1,6 @@
 module.exports = {
   network: {
-    port: '8080',
+    port: '3000',
   },
   mongodb: {
     database: 'mongodb://127.0.0.1:27017/joey',
