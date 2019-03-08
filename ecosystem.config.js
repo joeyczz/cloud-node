@@ -1,29 +1,32 @@
 module.exports = {
   apps: [{
     name: 'dev',
-    script: 'app.js',
+    script: './bin/www',
     autorestart: true,
     watch: true,
     env: {
       NODE_ENV: 'development',
+      PORT: 3000,
       CONFIG_ENV: 'dev',
     },
   }, {
     name: 'test',
-    script: 'app.js',
+    script: './bin/www',
     autorestart: true,
     watch: true,
     env: {
       NODE_ENV: 'development',
+      PORT: 3000,
       CONFIG_ENV: 'test',
     },
   }, {
     name: 'pro',
-    script: 'app.js',
+    script: './bin/www',
     autorestart: true,
     watch: true,
     env: {
       NODE_ENV: 'production',
+      PORT: 3000,
       CONFIG_ENV: 'pro',
     },
   }],
