@@ -1,7 +1,7 @@
 module.exports = {
   mongodb: {
     database: 'mongodb://127.0.0.1:27017/joey',
-    user: 'joey',
+    user: 'joeyUser',
     pass: 'Chenzhuo1029',
   },
   redis: {
