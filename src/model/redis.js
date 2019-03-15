@@ -35,10 +35,6 @@ const options = {
 
 const client = redis.createClient(options);
 
-// client.on('ready', () => {
-//   console.log('Redis ready');
-// });
-
 client.on('connect', () => {
   logger.info(`Redis connect to ${config.redis.host}:${config.redis.port}`);
 });

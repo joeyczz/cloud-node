@@ -32,7 +32,6 @@ server.listen(port);
 // 当前环境port
 logger.info(`port ## ${port}`);
 
-console.log('port ## ', port);
 server.on('error', onError);
 server.on('listening', onListening);
 
