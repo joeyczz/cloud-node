@@ -24,7 +24,7 @@ const options = {
       return opt.attempt * 100;
     }
     if (opt.attempt > 10) {
-      // test 1
+      // test
       logger.error('Retry time more than 10');
       // End reconnecting with built in error
       return undefined;
